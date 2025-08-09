@@ -58,9 +58,14 @@ configure_shell() {
   echo "Configuring shell..."
 
   # Ensure zsh is the default shell
-  if [ "$SHELL" != "$(which zsh)" ]; then
-    echo "Setting zsh as default shell..."
-    chsh -s "$(which zsh)"
+  if command -v zsh >/dev/null 2>&1; then
+    ZSH_PATH=$(command -v zsh)
+    if [ "$SHELL" != "$ZSH_PATH" ]; then
+      echo "Setting zsh as default shell..."
+      chsh -s "$ZSH_PATH"
+    fi
+  else
+    echo "zsh not installed yet, skipping shell change"
   fi
 
   # Configure Oh My Zsh theme (this will be handled by dotfiles)
