@@ -1,0 +1,48 @@
+// Zellij configuration
+// Minimal setup for session persistence with good mouse support
+
+// Use mouse scrolling (this is the key difference from tmux!)
+mouse_mode true
+scroll_buffer_size 100000
+
+// Simplified UI - hide everything
+pane_frames false
+simplified_ui true
+default_mode "locked"
+hide_session_name true
+show_release_notes false
+show_startup_tips false
+
+// Theme (Catppuccin Mocha colors)
+theme "catppuccin-mocha"
+
+// Keybindings - use Ctrl+g as prefix (different from tmux's Ctrl+b)
+keybinds {
+    normal {
+        bind "Ctrl g" { SwitchToMode "tmux"; }
+    }
+    
+    tmux {
+        bind "Esc" { SwitchToMode "normal"; }
+        bind "h" { MoveFocus "Left"; }
+        bind "j" { MoveFocus "Down"; }
+        bind "k" { MoveFocus "Up"; }
+        bind "l" { MoveFocus "Right"; }
+        bind "n" { NewPane; }
+        bind "x" { CloseFocus; }
+        bind "z" { ToggleFocusFullscreen; }
+        bind "c" { SwitchToMode "normal"; }
+        bind "1" { GoToTab 1; SwitchToMode "normal"; }
+        bind "2" { GoToTab 2; SwitchToMode "normal"; }
+        bind "3" { GoToTab 3; SwitchToMode "normal"; }
+        bind "4" { GoToTab 4; SwitchToMode "normal"; }
+        bind "5" { GoToTab 5; SwitchToMode "normal"; }
+    }
+}
+
+// Use naked layout as default
+default_layout "naked"
+
+// Auto-attach to main session
+session_name "main"
+attach_to_session true

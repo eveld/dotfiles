@@ -1,0 +1,26 @@
+# Performance optimizations
+DISABLE_AUTO_UPDATE="true"
+DISABLE_MAGIC_FUNCTIONS="true"
+DISABLE_COMPFIX="true"
+
+# Go paths
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+# Oh My Zsh configuration
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="agnoster"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
+
+# FZF theme (Catppuccin Mocha colors)
+export FZF_DEFAULT_OPTS='--color=fg:#cdd6f4,bg:#1e1e2e,hl:#f38ba8 --color=fg+:#cdd6f4,bg+:#313244,hl+:#f38ba8 --color=info:#cba6f7,prompt:#a6e3a1,pointer:#f5e0dc --color=marker:#f5e0dc,spinner:#f5e0dc,header:#94e2d5'
+
+# Terminal colors (Catppuccin Mocha)
+[ -f ~/.dir_colors ] && eval "$(dircolors ~/.dir_colors)"
+
+# Tool integrations
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+
+# Local overrides (not tracked in dotfiles)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local

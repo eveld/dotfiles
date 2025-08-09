@@ -1,0 +1,25 @@
+[user]
+    name = Erik Veld
+    email = mail@erikveld.com
+
+[core]
+    editor = nvim
+    excludesfile = ~/.gitignore_global
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
+
+[push]
+    default = current
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    cm = commit
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    lg = log --oneline --graph --decorate
