@@ -72,6 +72,20 @@ configure_shell() {
   echo "Shell configuration will be applied via dotfiles"
 }
 
+# Install Oh My Zsh (now that zsh is installed)
+install_oh_my_zsh() {
+  echo "Installing Oh My Zsh..."
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    if command -v zsh >/dev/null 2>&1; then
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    else
+      echo "zsh not found, skipping Oh My Zsh installation"
+    fi
+  else
+    echo "Oh My Zsh already installed"
+  fi
+}
+
 # Setup FZF key bindings and completion
 setup_fzf() {
   echo "Setting up FZF..."
@@ -88,6 +102,7 @@ setup_fzf() {
 main() {
   configure_git
   setup_1password_ssh
+  install_oh_my_zsh
   configure_shell
   setup_fzf
 
