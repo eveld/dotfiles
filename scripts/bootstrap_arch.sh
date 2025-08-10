@@ -22,4 +22,16 @@ if ! command -v op >/dev/null 2>&1; then
     rm -f op_linux_amd64_*.zip
 fi
 
+# Install Oh My Zsh (before dotfiles get applied)
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh My Zsh..."
+    if command -v zsh >/dev/null 2>&1; then
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    else
+        echo "zsh not found, skipping Oh My Zsh installation"
+    fi
+else
+    echo "Oh My Zsh already installed"
+fi
+
 echo "Arch Linux bootstrap complete"
