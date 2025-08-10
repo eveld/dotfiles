@@ -33,7 +33,6 @@ else
     exit 1
 fi
 
-# Oh My Zsh is now installed in bootstrap scripts (before dotfiles are applied)
-echo "Oh My Zsh should already be installed from bootstrap"
+# Oh My Zsh will be installed in run_once_025_oh_my_zsh.sh
 
 echo "Shell setup complete"
