@@ -108,7 +108,8 @@ install_packages() {
                 neovim \
                 ripgrep \
                 tmux \
-                zellij
+                zellij \
+                zsh
             ;;
     esac
 }
