@@ -4,7 +4,10 @@ DISABLE_MAGIC_FUNCTIONS="true"
 DISABLE_COMPFIX="true"
 
 # Go paths
-export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH="/usr/local/go/bin:$PATH"
+if command -v go >/dev/null 2>&1; then
+    export PATH="$PATH:$(go env GOPATH)/bin"
+fi
 
 # Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
