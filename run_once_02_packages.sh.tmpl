@@ -1,9 +1,46 @@
 #!/bin/sh
 set -eu
 
-# Install development packages for Debian/Ubuntu
-echo "Installing development packages for Debian/Ubuntu..."
+# OS-specific package installation using chezmoi templates
+echo "Starting package installation..."
 
+{{ if eq .chezmoi.os "darwin" }}
+echo "Installing macOS packages"
+echo "Installing packages via Homebrew..."
+brew install \
+    bottom \
+    direnv \
+    fd \
+    fzf \
+    go \
+    lazygit \
+    mosh \
+    neovim \
+    ripgrep \
+    tmux \
+    zellij
+
+{{ else if eq .chezmoi.os "linux" }}
+{{ if .chezmoi.osRelease }}
+{{ if eq .chezmoi.osRelease.id "arch" }}
+echo "Installing Arch Linux packages"
+echo "Installing packages via pacman..."
+sudo pacman -S --noconfirm \
+    base-devel \
+    bottom \
+    direnv \
+    fd \
+    fzf \
+    go \
+    lazygit \
+    mosh \
+    neovim \
+    ripgrep \
+    tmux \
+    zellij
+
+{{ else if or (eq .chezmoi.osRelease.id "debian") (eq .chezmoi.osRelease.id "ubuntu") }}
+echo "Installing Debian/Ubuntu packages"
 echo "Installing packages via apt..."
 sudo apt update
 sudo apt install -y \
@@ -46,7 +83,20 @@ if ! command -v zellij >/dev/null 2>&1; then
     sudo mv /tmp/zellij /usr/local/bin/
 fi
 
-# Install Go tools
+{{ else }}
+echo "Unsupported Linux distribution: {{ .chezmoi.osRelease.id }}"
+exit 1
+{{ end }}
+{{ else }}
+echo "Cannot detect Linux distribution"
+exit 1
+{{ end }}
+{{ else }}
+echo "Unsupported operating system: {{ .chezmoi.os }}"
+exit 1
+{{ end }}
+
+# Install Go tools (cross-platform)
 if command -v go >/dev/null 2>&1; then
     echo "Installing Go tools..."
     go install golang.org/x/tools/gopls@latest

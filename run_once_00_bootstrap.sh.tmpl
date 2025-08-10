@@ -1,0 +1,86 @@
+#!/bin/sh
+set -eu
+
+# OS-specific bootstrap using chezmoi templates
+echo "Starting bootstrap process..."
+
+{{ if eq .chezmoi.os "darwin" }}
+echo "Detected macOS"
+# Bootstrap for macOS
+# Install Homebrew if not present
+if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Install Xcode Command Line Tools
+if ! xcode-select -p >/dev/null 2>&1; then
+    echo "Installing Xcode Command Line Tools..."
+    xcode-select --install
+    echo "Please complete Xcode Command Line Tools installation and re-run 'chezmoi apply'"
+    exit 1
+fi
+
+echo "Installing essential packages..."
+brew install git curl wget zsh 1password-cli
+echo "macOS bootstrap complete"
+
+{{ else if eq .chezmoi.os "linux" }}
+{{ if .chezmoi.osRelease }}
+{{ if eq .chezmoi.osRelease.id "arch" }}
+echo "Detected Arch Linux"
+# Update system
+echo "Updating system..."
+sudo pacman -Syu --noconfirm
+
+# Install essential packages
+echo "Installing essential packages..."
+sudo pacman -S --noconfirm git curl wget unzip zsh
+
+# Install 1Password CLI
+if ! command -v op >/dev/null 2>&1; then
+    echo "Installing 1Password CLI..."
+    OP_URL=$(curl -s https://app-updates.agilebits.com/product_history/CLI2 | grep -o 'https://[^"]*linux_amd64[^"]*\.zip' | head -1)
+    curl -sSO "$OP_URL"
+    unzip -q op_linux_amd64_*.zip
+    sudo mv op /usr/local/bin/
+    rm -f op_linux_amd64_*.zip
+fi
+echo "Arch Linux bootstrap complete"
+
+{{ else if or (eq .chezmoi.osRelease.id "debian") (eq .chezmoi.osRelease.id "ubuntu") }}
+echo "Detected Debian/Ubuntu"
+# Update package lists
+echo "Updating package lists..."
+sudo apt update
+
+# Install essential packages
+echo "Installing essential packages..."
+sudo apt install -y git curl wget ca-certificates gnupg lsb-release zsh
+
+# Install 1Password CLI
+if ! command -v op >/dev/null 2>&1; then
+    echo "Installing 1Password CLI..."
+    curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+        sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+    
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | \
+        sudo tee /etc/apt/sources.list.d/1password.list
+    
+    sudo apt update && sudo apt install -y 1password-cli
+fi
+echo "Debian/Ubuntu bootstrap complete"
+
+{{ else }}
+echo "Unsupported Linux distribution: {{ .chezmoi.osRelease.id }}"
+exit 1
+{{ end }}
+{{ else }}
+echo "Cannot detect Linux distribution"
+exit 1
+{{ end }}
+{{ else }}
+echo "Unsupported operating system: {{ .chezmoi.os }}"
+exit 1
+{{ end }}
