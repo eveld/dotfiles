@@ -56,19 +56,8 @@ EOF
 # Setup shell configuration
 configure_shell() {
   echo "Configuring shell..."
-
-  # Ensure zsh is the default shell
-  if command -v zsh >/dev/null 2>&1; then
-    ZSH_PATH=$(command -v zsh)
-    if [ "$SHELL" != "$ZSH_PATH" ]; then
-      echo "Setting zsh as default shell..."
-      sudo chsh -s "$ZSH_PATH" "$(whoami)"
-    fi
-  else
-    echo "zsh not installed yet, skipping shell change"
-  fi
-
-  # Configure Oh My Zsh theme (this will be handled by dotfiles)
+  # Shell should already be changed to zsh by setup.sh
+  # Oh My Zsh theme and other configurations are handled by dotfiles
   echo "Shell configuration will be applied via dotfiles"
 }
 
@@ -105,10 +94,6 @@ main() {
   install_oh_my_zsh
   configure_shell
   setup_fzf
-  
-  # Reapply dotfiles to restore our zshrc after Oh My Zsh installation
-  echo "Reapplying dotfiles to restore configuration..."
-  chezmoi apply --force
 
   echo "Configuration complete"
   echo "Note: Restart your shell or run 'exec zsh' to apply changes"
