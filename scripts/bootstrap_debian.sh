@@ -4,6 +4,11 @@ set -eu
 # Bootstrap for Debian/Ubuntu
 echo "Detected Debian/Ubuntu - starting bootstrap..."
 
+# Set timezone non-interactively to avoid prompts
+echo "Setting timezone..."
+sudo ln -sf /usr/share/zoneinfo/UTC /etc/localtime
+export DEBIAN_FRONTEND=noninteractive
+
 # Update package lists
 echo "Updating package lists..."
 sudo apt update
