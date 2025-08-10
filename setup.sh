@@ -37,14 +37,7 @@ fi
 # Install chezmoi if not already installed
 if ! command -v chezmoi >/dev/null 2>&1; then
     echo "Installing chezmoi..."
-    if command -v curl >/dev/null 2>&1; then
-        curl -fsLS get.chezmoi.io | sh
-    elif command -v wget >/dev/null 2>&1; then
-        wget -qO- get.chezmoi.io | sh
-    else
-        echo "Error: curl or wget required to install chezmoi"
-        exit 1
-    fi
+    curl -fsLS get.chezmoi.io | sh
     
     # Add to PATH for this session
     export PATH="$HOME/bin:$PATH"
