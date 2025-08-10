@@ -1,106 +1,26 @@
 #!/bin/sh
 set -eu
 
-# OS-specific package installation using chezmoi templates
+# Packages dispatcher - uses chezmoi OS detection to call appropriate script
 echo "Starting package installation..."
 
 {{ if eq .chezmoi.os "darwin" }}
-echo "Installing macOS packages"
-echo "Installing packages via Homebrew..."
-brew install \
-    bottom \
-    direnv \
-    fd \
-    fzf \
-    go \
-    lazygit \
-    mosh \
-    neovim \
-    ripgrep \
-    tmux \
-    zellij
-
+exec "$(dirname "$0")/scripts/packages_darwin.sh"
 {{ else if eq .chezmoi.os "linux" }}
 {{ if .chezmoi.osRelease }}
 {{ if eq .chezmoi.osRelease.id "arch" }}
-echo "Installing Arch Linux packages"
-echo "Installing packages via pacman..."
-sudo pacman -S --noconfirm \
-    base-devel \
-    bottom \
-    direnv \
-    fd \
-    fzf \
-    go \
-    lazygit \
-    mosh \
-    neovim \
-    ripgrep \
-    tmux \
-    zellij
-
+exec "$(dirname "$0")/scripts/packages_arch.sh"
 {{ else if or (eq .chezmoi.osRelease.id "debian") (eq .chezmoi.osRelease.id "ubuntu") }}
-echo "Installing Debian/Ubuntu packages"
-echo "Installing packages via apt..."
-sudo apt update
-sudo apt install -y \
-    build-essential \
-    direnv \
-    fd-find \
-    fzf \
-    golang \
-    mosh \
-    neovim \
-    ripgrep \
-    tmux
-
-# Install tools not in default repos
-echo "Installing additional tools..."
-
-# Install bottom
-if ! command -v btm >/dev/null 2>&1; then
-    echo "Installing bottom..."
-    curl -LO https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-musl.tar.gz
-    tar -xzf bottom_x86_64-unknown-linux-musl.tar.gz
-    sudo mv btm /usr/local/bin/
-    rm bottom_x86_64-unknown-linux-musl.tar.gz
-fi
-
-# Install lazygit
-if ! command -v lazygit >/dev/null 2>&1; then
-    echo "Installing lazygit..."
-    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION#v}_Linux_x86_64.tar.gz"
-    tar xf lazygit.tar.gz lazygit
-    sudo install lazygit /usr/local/bin
-    rm lazygit.tar.gz lazygit
-fi
-
-# Install zellij
-if ! command -v zellij >/dev/null 2>&1; then
-    echo "Installing zellij..."
-    curl -L https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz | tar -xz -C /tmp
-    sudo mv /tmp/zellij /usr/local/bin/
-fi
-
+exec "$(dirname "$0")/scripts/packages_debian.sh"
 {{ else }}
-echo "Unsupported Linux distribution: {{ .chezmoi.osRelease.id }}"
+echo "Error: Unsupported Linux distribution: {{ .chezmoi.osRelease.id }}"
 exit 1
 {{ end }}
 {{ else }}
-echo "Cannot detect Linux distribution"
+echo "Error: Cannot detect Linux distribution"
 exit 1
 {{ end }}
 {{ else }}
-echo "Unsupported operating system: {{ .chezmoi.os }}"
+echo "Error: Unsupported operating system: {{ .chezmoi.os }}"
 exit 1
 {{ end }}
-
-# Install Go tools (cross-platform)
-if command -v go >/dev/null 2>&1; then
-    echo "Installing Go tools..."
-    go install golang.org/x/tools/gopls@latest
-    go install github.com/go-delve/delve/cmd/dlv@latest
-fi
-
-echo "Package installation complete"
