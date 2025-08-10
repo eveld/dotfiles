@@ -1,4 +1,27 @@
-README.md
-LICENSE
-.git
-.gitignore
+# Ignore OS-specific scripts based on current OS
+{{ if ne .chezmoi.os "darwin" }}
+run_once_*_darwin.sh
+{{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+run_once_*_linux.sh
+{{ end }}
+
+{{ if ne .chezmoi.os "darwin" }}
+{{ if ne .chezmoi.os "linux" }}
+run_once_*_arch.sh
+run_once_*_debian.sh
+{{ end }}
+{{ end }}
+
+# Only include arch-specific on Arch
+{{ if (.chezmoi.osRelease | and (hasKey .chezmoi.osRelease "id")) }}
+{{ if ne .chezmoi.osRelease.id "arch" }}
+run_once_*_arch.sh
+{{ end }}
+{{ if ne .chezmoi.osRelease.id "debian" }}
+{{ if ne .chezmoi.osRelease.id "ubuntu" }}
+run_once_*_debian.sh
+{{ end }}
+{{ end }}
+{{ end }}
