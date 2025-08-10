@@ -4,7 +4,7 @@ set -eu
 # Minimal bootstrap script - installs prerequisites, chezmoi, and initializes dotfiles
 # Everything else is handled by chezmoi run_once scripts
 
-VERSION="2.2.0"
+VERSION="2.3.0"
 DOTFILES_REPO="https://github.com/eveld/dotfiles.git"
 
 echo "Minimal Bootstrap v$VERSION"
