@@ -48,11 +48,19 @@ else
     echo "2. Run 'op account add' manually"
 fi
 
-# Ensure our custom .zshrc is applied (in case Oh My Zsh overwrote it)
+# Ensure our custom configs are applied (in case they weren't copied by chezmoi)
 if [ -f ~/.local/share/chezmoi/dot_zshrc ]; then
     echo "Applying custom .zshrc..."
     cp ~/.local/share/chezmoi/dot_zshrc ~/.zshrc
     echo "Custom .zshrc applied"
+fi
+
+# Ensure neovim config is applied
+if [ -d ~/.local/share/chezmoi/dot_config/nvim ]; then
+    echo "Applying neovim configuration..."
+    mkdir -p ~/.config
+    cp -r ~/.local/share/chezmoi/dot_config/nvim ~/.config/
+    echo "Neovim configuration applied"
 fi
 
 echo "Configuration complete"
