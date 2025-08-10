@@ -62,7 +62,7 @@ configure_shell() {
     ZSH_PATH=$(command -v zsh)
     if [ "$SHELL" != "$ZSH_PATH" ]; then
       echo "Setting zsh as default shell..."
-      sudo chsh -s "$ZSH_PATH" "$USER"
+      sudo chsh -s "$ZSH_PATH" "$(whoami)"
     fi
   else
     echo "zsh not installed yet, skipping shell change"
