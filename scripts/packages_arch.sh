@@ -11,7 +11,6 @@ sudo pacman -S --noconfirm \
     direnv \
     fd \
     fzf \
-    go \
     lazygit \
     mosh \
     neovim \
@@ -19,11 +18,10 @@ sudo pacman -S --noconfirm \
     tmux \
     zellij
 
-# Install Go tools
-if command -v go >/dev/null 2>&1; then
-    echo "Installing Go tools..."
-    go install golang.org/x/tools/gopls@latest
-    go install github.com/go-delve/delve/cmd/dlv@latest
-fi
+# Install Go using standardized method
+SCRIPTS_DIR="${HOME}/.local/share/chezmoi/scripts"
+. "${SCRIPTS_DIR}/install_go.sh"
+install_go
+install_go_tools
 
 echo "Arch Linux package installation complete"
