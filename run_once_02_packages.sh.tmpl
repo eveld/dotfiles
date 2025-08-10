@@ -5,13 +5,13 @@ set -eu
 echo "Starting package installation..."
 
 {{ if eq .chezmoi.os "darwin" }}
-exec "$(dirname "$0")/scripts/packages_darwin.sh"
+exec "{{ .chezmoi.homeDir }}/.local/share/chezmoi/scripts/packages_darwin.sh"
 {{ else if eq .chezmoi.os "linux" }}
 {{ if .chezmoi.osRelease }}
 {{ if eq .chezmoi.osRelease.id "arch" }}
-exec "$(dirname "$0")/scripts/packages_arch.sh"
+exec "{{ .chezmoi.homeDir }}/.local/share/chezmoi/scripts/packages_arch.sh"
 {{ else if or (eq .chezmoi.osRelease.id "debian") (eq .chezmoi.osRelease.id "ubuntu") }}
-exec "$(dirname "$0")/scripts/packages_debian.sh"
+exec "{{ .chezmoi.homeDir }}/.local/share/chezmoi/scripts/packages_debian.sh"
 {{ else }}
 echo "Error: Unsupported Linux distribution: {{ .chezmoi.osRelease.id }}"
 exit 1
