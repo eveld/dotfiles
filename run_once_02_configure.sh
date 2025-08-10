@@ -105,6 +105,10 @@ main() {
   install_oh_my_zsh
   configure_shell
   setup_fzf
+  
+  # Reapply dotfiles to restore our zshrc after Oh My Zsh installation
+  echo "Reapplying dotfiles to restore configuration..."
+  chezmoi apply --force
 
   echo "Configuration complete"
   echo "Note: Restart your shell or run 'exec zsh' to apply changes"
