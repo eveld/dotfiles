@@ -4,7 +4,7 @@ set -eu
 # Minimal bootstrap script - installs prerequisites, chezmoi, and initializes dotfiles
 # Everything else is handled by chezmoi run_once scripts
 
-VERSION="2.1.0"
+VERSION="2.2.0"
 DOTFILES_REPO="https://github.com/eveld/dotfiles.git"
 
 echo "Minimal Bootstrap v$VERSION"
@@ -22,16 +22,30 @@ esac
 echo "Checking prerequisites..."
 if ! command -v git >/dev/null 2>&1; then
     echo "Installing git..."
-    if command -v apt >/dev/null 2>&1; then
-        sudo apt update && sudo apt install -y git curl
-    elif command -v pacman >/dev/null 2>&1; then
-        sudo pacman -Sy --noconfirm git curl
-    elif command -v brew >/dev/null 2>&1; then
-        brew install git curl
-    else
-        echo "Error: Unable to install git. Please install git and curl manually."
-        exit 1
-    fi
+    case "$(uname)" in
+        Darwin)
+            if command -v brew >/dev/null 2>&1; then
+                brew install git curl
+            else
+                echo "Error: Homebrew not found. Please install Homebrew first."
+                exit 1
+            fi
+            ;;
+        Linux)
+            if command -v apt >/dev/null 2>&1; then
+                sudo apt update && sudo apt install -y git curl
+            elif command -v pacman >/dev/null 2>&1; then
+                sudo pacman -Sy --noconfirm git curl
+            else
+                echo "Error: Unable to install git. Please install git and curl manually."
+                exit 1
+            fi
+            ;;
+        *)
+            echo "Error: Unsupported OS"
+            exit 1
+            ;;
+    esac
 fi
 
 # Install chezmoi if not already installed
