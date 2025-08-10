@@ -16,7 +16,7 @@ source $ZSH/oh-my-zsh.sh
 export FZF_DEFAULT_OPTS='--color=fg:#cdd6f4,bg:#1e1e2e,hl:#f38ba8 --color=fg+:#cdd6f4,bg+:#313244,hl+:#f38ba8 --color=info:#cba6f7,prompt:#a6e3a1,pointer:#f5e0dc --color=marker:#f5e0dc,spinner:#f5e0dc,header:#94e2d5'
 
 # Terminal colors (Catppuccin Mocha)
-[ -f ~/.dir_colors ] && eval "$(dircolors ~/.dir_colors)"
+[ -f ~/.dir_colors ] && eval "$(SHELL=/bin/sh dircolors ~/.dir_colors)"
 
 # Tool integrations
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
