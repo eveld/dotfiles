@@ -13,8 +13,7 @@ sudo apt install -y \
     fzf \
     mosh \
     neovim \
-    ripgrep \
-    tmux
+    ripgrep
 
 # Install tools not in default repos
 echo "Installing additional tools..."

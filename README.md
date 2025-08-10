@@ -11,7 +11,7 @@ curl -sSL https://raw.githubusercontent.com/eveld/dotfiles/main/setup.sh | sh
 - Zsh + Oh My Zsh (agnoster theme)
 - Neovim + LazyVim 
 - Go (latest stable) + gopls + delve
-- Dev tools: bottom, direnv, fd, fzf, lazygit, mosh, ripgrep, tmux, zellij
+- Dev tools: bottom, direnv, fd, fzf, lazygit, mosh, ripgrep, zellij
 - 1Password CLI
 - Git config, SSH config for 1Password agent
 

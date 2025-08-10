@@ -15,7 +15,6 @@ sudo pacman -S --noconfirm \
     mosh \
     neovim \
     ripgrep \
-    tmux \
     zellij
 
 # Install Go using standardized method

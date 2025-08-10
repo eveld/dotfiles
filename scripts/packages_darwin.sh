@@ -14,7 +14,6 @@ brew install \
     mosh \
     neovim \
     ripgrep \
-    tmux \
     zellij
 
 # Install Go using standardized method
