@@ -10,7 +10,13 @@ sudo apt update
 
 # Install essential packages
 echo "Installing essential packages..."
-sudo apt install -y git curl wget ca-certificates gnupg lsb-release zsh
+sudo apt install -y git curl wget ca-certificates gnupg lsb-release zsh locales
+
+# Generate UTF-8 locale
+echo "Configuring locale..."
+sudo locale-gen en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # Install 1Password CLI
 if ! command -v op >/dev/null 2>&1; then
