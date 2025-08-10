@@ -12,6 +12,7 @@ sudo apt install -y \
     fd-find \
     fzf \
     mosh \
+    neovim \
     ripgrep \
     tmux
 
