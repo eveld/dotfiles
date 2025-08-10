@@ -48,6 +48,13 @@ else
     echo "2. Run 'op account add' manually"
 fi
 
+# Ensure our custom .zshrc is applied (in case Oh My Zsh overwrote it)
+if [ -f ~/.local/share/chezmoi/dot_zshrc ]; then
+    echo "Applying custom .zshrc..."
+    cp ~/.local/share/chezmoi/dot_zshrc ~/.zshrc
+    echo "Custom .zshrc applied"
+fi
+
 echo "Configuration complete"
 echo "Note: Restart your shell or run 'exec zsh' to apply changes"
 
